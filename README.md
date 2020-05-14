@@ -1,5 +1,5 @@
 # cmaketemplate
-demo for cmake project
+demo for cmake project for using poco as git submodule
 
 1. git clone
 2. git submodule update --init --recursive
