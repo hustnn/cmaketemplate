@@ -57,8 +57,6 @@ set(Poco_HINTS
         $ENV{Poco_DIR}
         )
 
-message("hahaha")
-
 if(NOT Poco_ROOT_DIR)
     # look for the root directory, first for the source-tree variant
     find_path(Poco_ROOT_DIR
