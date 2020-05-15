@@ -44,13 +44,10 @@ endif ()
 
 if (NOT USE_INTERNAL_POCO_LIBRARY)
     find_package (Poco COMPONENTS ${POCO_COMPONENTS})
-    message("hello***")
 endif ()
 
 if (Poco_INCLUDE_DIRS AND Poco_Foundation_LIBRARY)
-    message("hello 1")
 elseif (NOT MISSING_INTERNAL_POCO_LIBRARY)
-    message("hello 2")
     set (USE_INTERNAL_POCO_LIBRARY 1)
 
     set (ENABLE_ZIP 0 CACHE BOOL "")
