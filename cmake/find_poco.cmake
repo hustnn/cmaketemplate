@@ -1,5 +1,12 @@
 option (USE_INTERNAL_POCO_LIBRARY "Set to FALSE to use system poco library instead of bundled" ${NOT_UNBUNDLED})
 
+message(${NOT_UNBUNDLED})
+message(${USE_INTERNAL_POCO_LIBRARY})
+
+if (USE_INTERNAL_POCO_LIBRARY)
+    message("use internal poco")
+endif ()
+
 if (NOT EXISTS "${CMAKETEMPLATE_SOURCE_DIR}/contrib/poco/CMakeLists.txt")
     if (USE_INTERNAL_POCO_LIBRARY)
         message (WARNING "submodule contrib/poco is missing. to fix try run: \n git submodule update --init --recursive")
@@ -41,7 +48,9 @@ if (NOT USE_INTERNAL_POCO_LIBRARY)
 endif ()
 
 if (Poco_INCLUDE_DIRS AND Poco_Foundation_LIBRARY)
+    message("hello 1")
 elseif (NOT MISSING_INTERNAL_POCO_LIBRARY)
+    message("hello 2")
     set (USE_INTERNAL_POCO_LIBRARY 1)
 
     set (ENABLE_ZIP 0 CACHE BOOL "")
@@ -70,43 +79,43 @@ elseif (NOT MISSING_INTERNAL_POCO_LIBRARY)
 
     # used in internal compiler
     list (APPEND Poco_INCLUDE_DIRS
-            "${ClickHouse_SOURCE_DIR}/contrib/poco/Foundation/include/"
-            "${ClickHouse_SOURCE_DIR}/contrib/poco/Util/include/"
+            "${CMAKETEMPLATE_SOURCE_DIR}/contrib/poco/Foundation/include/"
+            "${CMAKETEMPLATE_SOURCE_DIR}/contrib/poco/Util/include/"
             )
 
     if (ENABLE_POCO_MONGODB)
         set (Poco_MongoDB_LIBRARY PocoMongoDB)
-        set (Poco_MongoDB_INCLUDE_DIR "${ClickHouse_SOURCE_DIR}/contrib/poco/MongoDB/include/")
+        set (Poco_MongoDB_INCLUDE_DIR "${CMAKETEMPLATE_SOURCE_DIR}/contrib/poco/MongoDB/include/")
     endif ()
 
     if (NOT DEFINED ENABLE_POCO_REDIS OR ENABLE_POCO_REDIS)
         set (Poco_Redis_LIBRARY PocoRedis)
-        set (Poco_Redis_INCLUDE_DIR "${ClickHouse_SOURCE_DIR}/contrib/poco/Redis/include/")
+        set (Poco_Redis_INCLUDE_DIR "${CMAKETEMPLATE_SOURCE_DIR}/contrib/poco/Redis/include/")
     endif ()
 
-    if (EXISTS "${ClickHouse_SOURCE_DIR}/contrib/poco/SQL/ODBC/include/")
+    if (EXISTS "${CMAKETEMPLATE_SOURCE_DIR}/contrib/poco/SQL/ODBC/include/")
         set (Poco_SQL_FOUND 1)
         set (Poco_SQL_LIBRARY PocoSQL)
         set (Poco_SQL_INCLUDE_DIR
-                "${ClickHouse_SOURCE_DIR}/contrib/poco/SQL/include"
-                "${ClickHouse_SOURCE_DIR}/contrib/poco/Data/include"
+                "${CMAKETEMPLATE_SOURCE_DIR}/contrib/poco/SQL/include"
+                "${CMAKETEMPLATE_SOURCE_DIR}/contrib/poco/Data/include"
                 )
         if ((NOT DEFINED POCO_ENABLE_SQL_ODBC OR POCO_ENABLE_SQL_ODBC) AND ODBC_FOUND)
             set (Poco_SQLODBC_INCLUDE_DIR
-                    "${ClickHouse_SOURCE_DIR}/contrib/poco/SQL/ODBC/include/"
-                    "${ClickHouse_SOURCE_DIR}/contrib/poco/Data/ODBC/include/"
+                    "${CMAKETEMPLATE_SOURCE_DIR}/contrib/poco/SQL/ODBC/include/"
+                    "${CMAKETEMPLATE_SOURCE_DIR}/contrib/poco/Data/ODBC/include/"
                     ${ODBC_INCLUDE_DIRS}
                     )
             set (Poco_SQLODBC_LIBRARY PocoSQLODBC ${ODBC_LIBRARIES} ${LTDL_LIBRARY})
         endif ()
     else ()
         set (Poco_Data_FOUND 1)
-        set (Poco_Data_INCLUDE_DIR "${ClickHouse_SOURCE_DIR}/contrib/poco/Data/include")
+        set (Poco_Data_INCLUDE_DIR "${CMAKETEMPLATE_SOURCE_DIR}/contrib/poco/Data/include")
         set (Poco_Data_LIBRARY PocoData)
         if ((NOT DEFINED ENABLE_DATA_ODBC OR ENABLE_DATA_ODBC) AND ODBC_FOUND)
             set (USE_POCO_DATAODBC 1)
             set (Poco_DataODBC_INCLUDE_DIR
-                    "${ClickHouse_SOURCE_DIR}/contrib/poco/Data/ODBC/include/"
+                    "${CMAKETEMPLATE_SOURCE_DIR}/contrib/poco/Data/ODBC/include/"
                     ${ODBC_INCLUDE_DIRS}
                     )
             set (Poco_DataODBC_LIBRARY PocoDataODBC ${ODBC_LIBRARIES} ${LTDL_LIBRARY})
@@ -120,8 +129,8 @@ elseif (NOT MISSING_INTERNAL_POCO_LIBRARY)
 
     if (USE_STATIC_LIBRARIES AND USE_INTERNAL_ZLIB_LIBRARY)
         list (APPEND Poco_INCLUDE_DIRS
-                "${ClickHouse_SOURCE_DIR}/contrib/${INTERNAL_ZLIB_NAME}/"
-                "${ClickHouse_BINARY_DIR}/contrib/${INTERNAL_ZLIB_NAME}/"
+                "${CMAKETEMPLATE_SOURCE_DIR}/contrib/${INTERNAL_ZLIB_NAME}/"
+                "${CMAKETEMPLATE_SOURCE_DIR}/contrib/${INTERNAL_ZLIB_NAME}/"
                 )
     endif ()
 
